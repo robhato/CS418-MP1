@@ -25,6 +25,10 @@ var rotAngle = 0;
 /** @global The ModelView matrix contains any modeling and viewing transformations */
 var mvMatrix = glMatrix.mat4.create();
 
+/** @global A second ModelView matrix contains any modeling and viewing transformations */
+var mvMatrix2 = glMatrix.mat4.create();
+
+
 /** @global Records time last time frame rendered */
 var previousTime = 0;
 
@@ -108,6 +112,7 @@ function setupShaders() {
   shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
   shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
   shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMvMatrix");
+  shaderProgram.mvMatrixUniform2 = gl.getUniformLocation(shaderProgram, "uMvMat2");
     
   gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
   gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
@@ -384,6 +389,7 @@ function draw() {
 
   // Send current ModelView matrix to vertex shader
   gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+  gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform2, false, mvMatrix2);
     
   // Render I
   gl.drawArrays(gl.TRIANGLES, 0, vertexPositionBuffer.numberOfItems);
@@ -394,6 +400,10 @@ function draw() {
  */
  function animate(now) {
      var speed = document.getElementById("speed").value;
+     var scaler = document.getElementById("scale").value;
+     // Scalar vector used for translation
+     var scaleVec = glMatrix.vec3.fromValues(scaler, scaler, 0);
+
      draw();
      
      // Convert time to seconds
@@ -408,10 +418,14 @@ function draw() {
      if (rotAngle > 360.0) {
          rotAngle = 0.0;
      }
+     glMatrix.mat4.fromScaling(mvMatrix2, scaleVec);
      glMatrix.mat4.fromZRotation(mvMatrix, degToRad(rotAngle));
+     
      
      // ...next frame after
      requestAnimationFrame(animate);
+     
+     
  }
 
 /**
