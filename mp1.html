@@ -34,7 +34,7 @@ void main(void) {
  }
 </script>
 <script  src="gl-matrix-min.js"></script>
-<script src="dancingi.js"></script>   
+<script src="mp1.js"></script>   
 <body onload="startup();">
   <canvas id="myGLCanvas" width="500" height="500"></canvas>
 </body>
@@ -47,5 +47,15 @@ void main(void) {
 <div>
     <input type="range" id="scale" name="scale" min="0.1" max="2" step="0.01" value="1">
     <label for="scale">Scaling</label>
+</div>
+<div>
+    <input type="range" id="degrees" name="degrees" min="0" max="360" step="1" value="0">
+    <label for="degrees">Degrees</label>
+</div>
+<div>
+    <input type="radio" id="animationA" name="animation" value="i" checked>
+    <label for="animationA">First Animation</label>
+    <input type="radio" id="animationB" name="animation" value="custom">
+    <label for="animationB">Custom Animation</label>
 </div>
 </html>
